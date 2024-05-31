@@ -8,7 +8,6 @@ import (
 	"net/http"
 )
 
-// `json:"id"`の記載がなくてもJSON形式で返却されるが、キー名のままだと困る場合はスネークケースなどに直すことができる
 type Page struct {
 	ID    int    `json:"id"`
 	Title string `json:"title"`
@@ -25,27 +24,34 @@ var pages = []Page {
 		ID:    2,
 		Title: "A Tour of Go",
 		Url:   "https://go-tour-jp.appspot.com/welcome/1",
+	},{
+		ID:    3,
+		Title: "A Tour of Go",
+		Url:   "https://go-tour-jp.appspot.com/welcome/1",
+	}, {
+		ID:    4,
+		Title: "A Tour of Go",
+		Url:   "https://go-tour-jp.appspot.com/welcome/1",
+	}, {
+		ID:    5,
+		Title: "A Tour of Go",
+		Url:   "https://go-tour-jp.appspot.com/welcome/1",
 	},
 }
 
-// JSON返却用の構造体
 type PageJSON struct {
 	Status int `json:"status"`
 	Pages  *[]Page
 }
 
-// ただ文字列「Hello, World」を返却するハンドラー
+func main() {
+	Db()
+	
+	http.HandleFunc("/pages", pagesHandler)
+	log.Fatal(http.ListenAndServe(":3000", nil))
+}
 
-// func indexHandler(w http.ResponseWriter, r *http.Request) {
-// 	_, err := fmt.Fprint(w, "Hello, World")
-// 	if err != nil {
-// 		return
-// 	}
-// }
-
-// appilication/jsonでJSONっぽい値を返却するハンドラー
 func pagesHandler(w http.ResponseWriter, r *http.Request) {
-
 	var pj PageJSON
 	pj.Status = 200
 	pj.Pages = &pages
@@ -55,7 +61,7 @@ func pagesHandler(w http.ResponseWriter, r *http.Request) {
 	if err := enc.Encode(&pj); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(buf.String())
+	// fmt.Println(buf.String())
 
 	// Content-Typeを設定
 	w.Header().Set("Content-Type", "application/json;charset=utf-8")
@@ -65,15 +71,4 @@ func pagesHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-}
-
-func main() {
-
-	// text/plain返却　"/" のとき indexHandlerを実行する
-	// http.HandleFunc("/", indexHandler)
-
-	// application/json返却 "/pages"の時 pagesHandlerを返却
-	http.HandleFunc("/pages", pagesHandler)
-	log.Fatal(http.ListenAndServe(":3000", nil))
-	
 }
