@@ -3,13 +3,13 @@ package main
 import (
 	"database/sql"
 	"fmt"
+    "os"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func Db() {
-    // Create the database handle, confirm driver is present
 	// db, _ := sql.Open("mysql", "[username]:[password]@/[database]")
-    db, _ := sql.Open("mysql", "root:password@/rs")
+    db, _ := sql.Open("mysql", fmt.Sprintf("%s:%s@/%s", os.Getenv("USER_NAME"), os.Getenv("PASSWORD"), os.Getenv("DATABASE_NAME")))
     defer db.Close()
 
     // Connect and check the server version

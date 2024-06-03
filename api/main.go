@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"github.com/joho/godotenv"
 )
 
 type Page struct {
@@ -14,7 +16,7 @@ type Page struct {
 	Url   string `json:"url"`
 }
 
-// Pageの配列リテラル（本来はDBから返却された値で埋めていく）
+// jsonの仮データ
 var pages = []Page {
 	{
 		ID:    1,
@@ -44,7 +46,25 @@ type PageJSON struct {
 	Pages  *[]Page
 }
 
+func Env_load() {
+	// `go run main.go db.go` 実行で `.env.local`を使用
+	// `GO_ENV=production go run main.go db.go` 実行で `.env`を使用
+	if os.Getenv("GO_ENV") == "" {
+		os.Setenv("GO_ENV", "local")
+	} else if os.Getenv("GO_ENV") == "production" {
+		os.Setenv("GO_ENV", "")
+	}
+	
+	err := godotenv.Load(fmt.Sprintf("../.env.%s", os.Getenv("GO_ENV")))
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+}
+
 func main() {
+	// 環境変数読み込み
+	Env_load()
+	// DB接続
 	Db()
 	
 	http.HandleFunc("/pages", pagesHandler)
@@ -61,9 +81,7 @@ func pagesHandler(w http.ResponseWriter, r *http.Request) {
 	if err := enc.Encode(&pj); err != nil {
 		log.Fatal(err)
 	}
-	// fmt.Println(buf.String())
 
-	// Content-Typeを設定
 	w.Header().Set("Content-Type", "application/json;charset=utf-8")
 
 	// Responseに書き込み
