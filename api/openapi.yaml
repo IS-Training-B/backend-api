@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: rental server API
   description: レンタルサーバのAPI仕様書
-  version: 0.1.0
+  version: 0.1.1
 servers:
   - url: http://api.example.com
     description: Optional server description, e.g. Main (production) server
@@ -112,6 +112,10 @@ paths:
       responses:
         '200':
           description: Successful
+          content:
+            application/json:
+              schema: 
+                  $ref: '#/components/schemas/Mail'
         '400':
           description: Faild
 
@@ -136,6 +140,10 @@ paths:
       responses:
         '200':
           description: Successful
+          content:
+            application/json:
+              schema: 
+                  $ref: '#/components/schemas/Mail'
         '400':
           description: Faild
                   
