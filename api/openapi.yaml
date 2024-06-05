@@ -217,7 +217,7 @@ components:
         mail_username:
           type: string
           example: user01
-        mail_adress:
+        mail_address:
           type: string
           example: user01@example.com
                 

@@ -28,5 +28,5 @@ https://qiita.com/ynack/items/4709b77d42847823cdb3
 - テストユーザデータ追加
     `source .../backend-api/test_users.sql`
 ### 5. ビルド
-`go run main.go db.go`  
+`go run .`  
 3000ポート

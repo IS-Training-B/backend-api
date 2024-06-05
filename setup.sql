@@ -25,5 +25,6 @@ CREATE TABLE mails
     created_at     TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     updated_at     TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     deleted_at     TIMESTAMP(6) DEFAULT NULL,
+    UNIQUE (mail_address),
     PRIMARY KEY (id)
   )

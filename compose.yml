@@ -1,25 +1,39 @@
 services:
   swagger-editor:
     image: swaggerapi/swagger-editor
+    platform: linux/x86_64
     container_name: "swagger-editor"
     ports:
       - "8001:8080"
 
   swagger-ui:
     image: swaggerapi/swagger-ui
+    platform: linux/x86_64
     container_name: "swagger-ui"
     ports:
       - "8002:8080"
     volumes:
-      - ./api/openapi.yaml:/openapi.yaml # Swagger File
+      - ./api/openapi.yaml:/openapi.yaml
     environment:
-      SWAGGER_JSON: /openapi.yaml # Swagger File
+      SWAGGER_JSON: /openapi.yaml
 
   swagger-api:
     image: stoplight/prism:latest
+    platform: linux/x86_64
     container_name: "swagger-api"
     ports:
       - "8003:4010"
-    command: mock -h 0.0.0.0 /openapi.yaml # Swagger File
+    command: mock -h 0.0.0.0 /openapi.yaml
     volumes:
-      - ./api/openapi.yaml:/openapi.yaml # Swagger File
+      - ./api/openapi.yaml:/openapi.yaml
+
+  # go-api:
+  #   image: golang:1.22.3
+  #   ports:
+  #     - 8080:80
+  #   volumes:
+  #     - type: bind
+  #       source: "."
+  #       target: "/go"
+  #   tty: true
+  #   restart: always
