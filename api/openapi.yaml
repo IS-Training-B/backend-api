@@ -106,7 +106,7 @@ paths:
                   type: integer
                   format: int64
                   example: 1
-                mail_username:
+                mail_localpart:
                   type: string
                   example: user01
       responses:
@@ -118,6 +118,8 @@ paths:
                   $ref: '#/components/schemas/Mail'
         '400':
           description: Faild
+        '409':
+          description: Conflict mail address.
 
   /mail/delete:
     post:
@@ -134,16 +136,12 @@ paths:
                   type: integer
                   format: int64
                   example: 1
-                mail_username:
+                mail_localpart:
                   type: string
                   example: user01
       responses:
         '200':
           description: Successful
-          content:
-            application/json:
-              schema: 
-                  $ref: '#/components/schemas/Mail'
         '400':
           description: Faild
                   
@@ -214,7 +212,7 @@ components:
           type: integer
           format: int64
           example: 1
-        mail_username:
+        mail_localpart:
           type: string
           example: user01
         mail_address:

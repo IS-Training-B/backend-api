@@ -11,6 +11,7 @@ import (
 func Env_load() {
 	// `go run .` 実行で `.env.local`を使用
 	// `GO_ENV=production go run .` 実行で `.env`を使用
+
 	if os.Getenv("GO_ENV") == "" {
 		os.Setenv("GO_ENV", "local")
 	} else if os.Getenv("GO_ENV") == "production" {
@@ -29,5 +30,8 @@ func init() {
 
 func main() {
 	http.HandleFunc("/mails", getUserMails)
+	http.HandleFunc("/mail/create", createMailAddress)
+	http.HandleFunc("/mail/delete", deleteMailAddresss)
+	http.HandleFunc("/status", getControlPanelState)
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }

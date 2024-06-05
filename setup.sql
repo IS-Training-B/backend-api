@@ -20,11 +20,10 @@ CREATE TABLE mails
   (
     id             INT NOT NULL AUTO_INCREMENT,
     user_id        INTEGER NOT NULL,
-    mail_username  VARCHAR(255),
+    mail_localpart  VARCHAR(255),
     mail_address   VARCHAR(255),
     created_at     TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     updated_at     TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-    deleted_at     TIMESTAMP(6) DEFAULT NULL,
     UNIQUE (mail_address),
     PRIMARY KEY (id)
   )

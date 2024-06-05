@@ -1,6 +1,30 @@
 # https://marketplace.visualstudio.com/items?itemName=humao.rest-client
 
-GET http://localhost:3000/pages HTTP/1.1
+
+###
+
+GET http://localhost:3000/mails?user_id=2 HTTP/1.1
 content-type: application/json
 
 ###
+POST http://localhost:3000/mail/create HTTP/1.1
+content-type: application/json
+
+{
+    "user_id": 2,
+    "mail_localpart": "user02"
+}
+
+###
+POST http://localhost:3000/mail/delete HTTP/1.1
+content-type: application/json
+
+{
+    "user_id": 2,
+    "mail_localpart": "user02"
+}
+
+###
+
+POST http://localhost:3000/status HTTP/1.1
+content-type: application/json
