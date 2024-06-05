@@ -32,8 +32,9 @@ func checkWebsiteStatus(url string) (int, string, error) {
     return resp.StatusCode, "DOWN", fmt.Errorf("received status code: %d", resp.StatusCode)
 }
 
+// GET localhost:3000/status
 func getControlPanelState(w http.ResponseWriter, r *http.Request) {
-    websiteURL := os.Getenv("ControlPaneURL")
+    websiteURL := os.Getenv("CONTROLPANEL_URL")
 
     statusCode, status, err := checkWebsiteStatus(websiteURL)
     message := "Website is " + status

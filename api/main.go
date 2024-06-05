@@ -29,9 +29,16 @@ func init() {
 }
 
 func main() {
+	http.HandleFunc("/user/create", addUbuntuUser)
+	http.HandleFunc("/user/delete", deleteUbuntuUser)
 	http.HandleFunc("/mails", getUserMails)
 	http.HandleFunc("/mail/create", createMailAddress)
 	http.HandleFunc("/mail/delete", deleteMailAddresss)
-	http.HandleFunc("/status", getControlPanelState)
+	http.HandleFunc("/sshkey/upload", uploadSSHkey)
+	http.HandleFunc("/ftp/setup", setupFTP)
+
+	// 用意したけどどこで使うかは未定なAPI
+	http.HandleFunc("/status", getControlPanelState) // コントロールパネルの死活監視用
+	
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }
