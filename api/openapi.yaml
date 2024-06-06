@@ -39,6 +39,9 @@ paths:
                 username:
                   type: string
                   example: sample_user
+                password:
+                  type: string
+                  example: password
       responses:
         '200':
           description: Successful
