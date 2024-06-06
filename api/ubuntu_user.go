@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"database/sql"
 )
 
 type UserRequest struct {
@@ -23,15 +24,22 @@ func addUbuntuUser(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-	// userId := requestSchema.UserId
+	userId := requestSchema.UserId
 	username := requestSchema.UserName
 	password := requestSchema.Password
-	
+
 	if exist,err := checkUserNameExist(db, username); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	} else if exist {
 		http.Error(w, "そのユーザは既に存在しています", http.StatusBadRequest)
+		return
+	}
+
+	// passwordをDBに登録
+	err := setUserPassword(db, userId, password)
+	if err != nil {
+		http.Error(w, "DBへのパスワード登録に失敗しました", http.StatusBadRequest)
 		return
 	}
 	
@@ -94,4 +102,16 @@ func deleteUbuntuUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+}
+
+func setUserPassword(db *sql.DB, userID string, newPassword string) error {
+    query := "UPDATE users SET password = ? WHERE id = ?"
+    stmt, err := db.Prepare(query)
+    if err != nil {
+        return err
+    }
+    defer stmt.Close()
+
+    _, err = stmt.Exec(newPassword, userID)
+    return err
 }

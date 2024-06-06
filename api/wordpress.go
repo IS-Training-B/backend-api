@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"database/sql"
 )
 
 // POST localhost:3000/wordpress/install
@@ -23,13 +24,42 @@ func installWordpress(w http.ResponseWriter, r *http.Request) {
 
 	userId := requestSchema.UserId
 	username,_ := getUserNameByUserID(db, userId)
+	dbPassword, _ := getUserPassword(db, userId)
+
+	// wordpress用のユーザDBが存在するか確認
+	exist,err := databaseExists(db, username)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+	}
+
+	// wordpress用のユーザDBがなければ作成
+	if !exist && os.Getenv("GO_ENV") == "production" {
+		// 実行するシェルスクリプトファイルのパス
+		scriptPath := "../../script/make-user.sh"
+	
+		// シェルスクリプトの実行
+		// $0 <db_user> <db_password>
+		stdout, stderr, err := runShellScript(scriptPath, username, dbPassword)
+		if err != nil {
+			fmt.Println("Error:", err)
+			fmt.Println("Stderr:", stderr)
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+	
+		// 正常に終了した場合の処理
+		fmt.Println("Script executed successfully")
+		fmt.Println("Stdout:", stdout)
+	}
 
 	if os.Getenv("GO_ENV") == "production" {
 		// 実行するシェルスクリプトファイルのパス
 		scriptPath := "../../script/wordpress_setup.sh"
 	
 		// シェルスクリプトの実行
-		stdout, stderr, err := runShellScript(scriptPath, username)
+		//  $0 <username> <domain> <db_name> <db_user> <db_password>"
+		stdout, stderr, err := runShellScript(scriptPath, username, os.Getenv("DOMAIN"), username, username, dbPassword)
 		if err != nil {
 			fmt.Println("Error:", err)
 			fmt.Println("Stderr:", stderr)
@@ -70,4 +100,17 @@ func getWordpressStatus(w http.ResponseWriter, r *http.Request) {
 
     w.Header().Set("Content-Type", "application/json")
     json.NewEncoder(w).Encode(response)
+}
+
+func getUserPassword(db *sql.DB, userID string) (string, error) {
+    var password string
+    query := "SELECT password FROM users WHERE id = ?"
+    err := db.QueryRow(query, userID).Scan(&password)
+    if err != nil {
+        if err == sql.ErrNoRows {
+            return "", fmt.Errorf("no user with id %s", userID)
+        }
+        return "", err
+    }
+    return password, nil
 }

@@ -177,7 +177,36 @@ paths:
             type: string
       responses:
         '200':
-          description: user's wordpress site status. 
+          description: get user's wordpress site status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    format: int64
+                    example: 404
+                  status:
+                    type: string
+                    example: "UP"
+                    enum:
+                      - "UP"
+                      - "DOWN"
+                  message:
+                    type: string
+                    example: "received status code: 404"
+        '400':
+          description: Faild
+          
+  /status:
+    get:
+      tags:
+      - other
+      summary: Get control panel status.
+      responses:
+        '200':
+          description: get control panel status
           content:
             application/json:
               schema:

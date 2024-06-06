@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS rs;
-USE rs;
+CREATE DATABASE IF NOT EXISTS prisma;
+USE prisma;
 
 -- DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS mails;
@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS mails;
 --   (
 --     id             INT NOT NULL AUTO_INCREMENT,
 --     name           VARCHAR(255),
+--     password       VARCHAR(255),
 --     email          VARCHAR(255),
 --     email_verified TIMESTAMP(6),
 --     image          VARCHAR(255),

@@ -42,3 +42,17 @@ func checkUserNameExist(db *sql.DB, name string) (bool, error) {
     }
     return exist, nil
 }
+
+// DBの存在確認（Wordpress用）
+func databaseExists(db *sql.DB, dbName string) (bool, error) {
+    var exists bool
+    query := fmt.Sprintf("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '%s'", dbName)
+    err := db.QueryRow(query).Scan(&exists)
+    if err == sql.ErrNoRows {
+        return false, nil
+    }
+    if err != nil {
+        return false, err
+    }
+    return true, nil
+}
