@@ -36,6 +36,8 @@ func main() {
 	http.HandleFunc("/mail/delete", deleteMailAddresss)
 	http.HandleFunc("/sshkey/upload", uploadSSHkey)
 	http.HandleFunc("/ftp/setup", setupFTP)
+	http.HandleFunc("/wordpress/install", installWordpress)
+	http.HandleFunc("/wordpress/status", getWordpressStatus)
 
 	// 用意したけどどこで使うかは未定なAPI
 	http.HandleFunc("/status", getControlPanelState) // コントロールパネルの死活監視用

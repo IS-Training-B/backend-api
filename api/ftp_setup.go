@@ -11,10 +11,13 @@ import (
 // FTPの初期設定
 
 // POST localhost:3000/ftp/setup
+
 func setupFTP(w http.ResponseWriter, r *http.Request) {
+	db := Db()
+	defer db.Close()
+
 	requestSchema := struct {
 		UserId string `json:"user_id"`
-        UserName string `json:"username"`
     }{}
 
     if err := json.NewDecoder(r.Body).Decode(&requestSchema); err != nil {
@@ -22,7 +25,8 @@ func setupFTP(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-	username := requestSchema.UserName
+	userId := requestSchema.UserId
+	username,_ := getUserNameByUserID(db, userId)
 
 	if os.Getenv("GO_ENV") == "production" {
 		// 実行するシェルスクリプトファイルのパス
