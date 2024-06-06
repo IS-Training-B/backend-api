@@ -2,9 +2,9 @@ openapi: 3.0.3
 info:
   title: rental server API
   description: レンタルサーバのAPI仕様書
-  version: 0.1.1
+  version: 0.2.0
 servers:
-  - url: http://api.example.com
+  - url: http://localhost:3000
     description: Optional server description, e.g. Main (production) server
 paths:
   /users:
