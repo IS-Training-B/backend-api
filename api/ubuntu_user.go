@@ -10,6 +10,7 @@ import (
 type UserRequest struct {
     UserId string `json:"user_id"`
     UserName string `json:"username"`
+	Password string `json:"password"`
 }
 
 func addUbuntuUser(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +25,8 @@ func addUbuntuUser(w http.ResponseWriter, r *http.Request) {
 
 	// userId := requestSchema.UserId
 	username := requestSchema.UserName
-
+	password := requestSchema.Password
+	
 	if exist,err := checkUserNameExist(db, username); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -32,9 +34,6 @@ func addUbuntuUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "そのユーザは既に存在しています", http.StatusBadRequest)
 		return
 	}
-
-	// Ubuntuユーザのパスワード。user名と同じにしておく。
-	password := username
 	
 	// TODO: 動作確認（APIを叩いて正常にシェルスクリプトが走るか）
 	// 新規Ubuntuユーザーの追加処理
