@@ -19,8 +19,8 @@ DROP TABLE IF EXISTS mails;
 CREATE TABLE mails 
   (
     id             INT NOT NULL AUTO_INCREMENT,
-    user_id        INTEGER NOT NULL,
-    mail_localpart  VARCHAR(255),
+    user_id        VARCHAR(255) NOT NULL,
+    mail_localpart VARCHAR(255),
     mail_address   VARCHAR(255),
     created_at     TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     updated_at     TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),

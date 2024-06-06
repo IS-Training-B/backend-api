@@ -16,7 +16,7 @@ type Mail struct {
 }
 
 type MailRequest struct {
-    UserId int `json:"user_id"`
+    UserId string `json:"user_id"`
     MailLocalpart string `json:"mail_localpart"`
 }
 
@@ -188,7 +188,7 @@ func deleteMailAddresss(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func checkRecordExists(db *sql.DB, MailLocalpart string, userId int) (bool, error) {
+func checkRecordExists(db *sql.DB, MailLocalpart string, userId string) (bool, error) {
     var exists bool
     query := "SELECT EXISTS(SELECT 1 FROM mails WHERE mail_localpart = ? AND user_id = ?)"
     err := db.QueryRow(query, MailLocalpart, userId).Scan(&exists)

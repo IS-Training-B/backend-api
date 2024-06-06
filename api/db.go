@@ -17,7 +17,7 @@ func Db() (db *sql.DB)  {
 }
 
 // ユーザIDからユーザ名を取得
-func getUserNameByUserID(db *sql.DB, userId int) (string, error) {
+func getUserNameByUserID(db *sql.DB, userId string) (string, error) {
     var username string
     query := "SELECT name FROM users WHERE id = ?"
 

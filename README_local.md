@@ -2,7 +2,8 @@
 ### Go (v1.22.3) インストール
   - Homebrewを使う場合（macOSまたはLinux）
     1. [Homebrewインストール](https://brew.sh/ja/)
-    2. `brew install go@1.22.3`
+    2. `brew install go@1.18.1`
+    
   - ライブラリのインストール  
     `go get github.com/joho/godotenv`
 

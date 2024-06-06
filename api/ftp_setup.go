@@ -13,7 +13,7 @@ import (
 // POST localhost:3000/ftp/setup
 func setupFTP(w http.ResponseWriter, r *http.Request) {
 	requestSchema := struct {
-		UserId int `json:"user_id"`
+		UserId string `json:"user_id"`
         UserName string `json:"username"`
     }{}
 

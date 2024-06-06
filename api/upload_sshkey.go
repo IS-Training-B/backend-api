@@ -8,7 +8,7 @@ import (
 )
 
 type SSHkeyRequest struct {
-    UserId int `json:"user_id"`
+    UserId string `json:"user_id"`
     SSHkey string `json:"ssh_public_key"`
 }
 
