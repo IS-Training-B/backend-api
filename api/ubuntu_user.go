@@ -51,6 +51,7 @@ func addUbuntuUser(w http.ResponseWriter, r *http.Request) {
 		scriptPath := "../../script/user_add.sh"
 	
 		// シェルスクリプトの実行
+		fmt.Println("User: %s add script run ...", username)
 		stdout, stderr, err := runShellScript(scriptPath, username, password)
 		if err != nil {
 			fmt.Println("Error:", err)

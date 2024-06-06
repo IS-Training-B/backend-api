@@ -9,26 +9,8 @@ import (
 )
 
 func Env_load() {
-	// `go run .` 実行で `.env.local`を使用
-	// `GO_ENV=production go run .` 実行で `.env`を使用
-
-	if os.Getenv("GO_ENV") == "" {
-		os.Setenv("GO_ENV", "local")
-	} else if os.Getenv("GO_ENV") == "production" {
-		os.Setenv("GO_ENV", "")
-	}
-	
-	if os.Getenv("GO_ENV") == "production" {
-		err := godotenv.Load(fmt.Sprintf("../.env"))
-		if err != nil {
-			log.Fatal("Error loading .env file")
-		}
-	} else {
-		err := godotenv.Load(fmt.Sprintf("../.env.%s", os.Getenv("GO_ENV")))
-		if err != nil {
-			log.Fatal("Error loading .env file")
-		}
-	}
+	err := godotenv.Load(fmt.Sprintf("../.env"))
+	// err := godotenv.Load(fmt.Sprintf("../.env.local"))
 }
 
 func init() {
