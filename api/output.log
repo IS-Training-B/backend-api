@@ -1,0 +1,32 @@
+nohup: ignoring input
+successfully delete test_mail02@crane74.com
+Stdout: test_mail02@crane74.com not found in Dovecot passwd file.
+Deleted test_mail02@crane74.com from Postfix virtual file.
+Mail user test_mail02@crane74.com deleted successfully.
+
+successfully delete test_mail03@crane74.com
+Stdout: test_mail03@crane74.com not found in Dovecot passwd file.
+Deleted test_mail03@crane74.com from Postfix virtual file.
+
+User: testuser2 add script run ...
+Script executed successfully
+Stdout: User testuser2 added successfully and restricted to their home directory.
+Script permissions set to 701.
+
+create user's DB script executed successfully
+Stdout: 
+Script executed successfully
+Stdout: Downloading and installing WordPress...
+Downloading WordPress 6.5.4 (en_US)...
+Using cached file '/root/.wp-cli/cache/core/wordpress-6.5.4-en_US.tar.gz'...
+Success: WordPress downloaded.
+Creating wp-config.php...
+Success: Generated 'wp-config.php' file.
+Installing WordPress...
+Setting permissions...
+Creating Nginx configuration...
+Testing and reloading Nginx...
+WordPress installation and Nginx configuration completed for crane74.com/testuser2.
+
+URL: https://crane74.com/testuser2/wordpress status get
+URL: https://crane74.com/testuser2/wordpress status get

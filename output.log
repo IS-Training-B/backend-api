@@ -1,0 +1,4 @@
+nohup: ignoring input
+go: cannot find main module, but found .git/config in /var/www/backend-api
+	to create a module there, run:
+	go mod init

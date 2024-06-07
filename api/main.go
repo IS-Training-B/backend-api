@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"github.com/joho/godotenv"
 )
 
 func Env_load() {
-	err := godotenv.Load(fmt.Sprintf("../.env"))
+	godotenv.Load(fmt.Sprintf("../.env"))
 	// err := godotenv.Load(fmt.Sprintf("../.env.local"))
 }
 

@@ -36,6 +36,7 @@ func checkWebsiteStatus(url string) (int, string, error) {
 func getControlPanelState(w http.ResponseWriter, r *http.Request) {
     websiteURL := os.Getenv("CONTROLPANEL_URL")
 
+    fmt.Println(fmt.Sprintf("URL: %s status get", websiteURL))
     statusCode, status, err := checkWebsiteStatus(websiteURL)
     message := "Website is " + status
 

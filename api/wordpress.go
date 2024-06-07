@@ -24,7 +24,8 @@ func installWordpress(w http.ResponseWriter, r *http.Request) {
 
 	userId := requestSchema.UserId
 	username,_ := getUserNameByUserID(db, userId)
-	dbPassword, _ := getUserPassword(db, userId)
+	ubuntuPassword, _ := getUserPassword(db, userId)
+	email, _ := getUserEmail(db, userId)
 
 	// wordpress用のユーザDBが存在するか確認
 	exist,err := databaseExists(db, username)
@@ -40,7 +41,7 @@ func installWordpress(w http.ResponseWriter, r *http.Request) {
 	
 		// シェルスクリプトの実行
 		// $0 <db_user> <db_password>
-		stdout, stderr, err := runShellScript(scriptPath, username, dbPassword)
+		stdout, stderr, err := runShellScript(scriptPath, username, ubuntuPassword)
 		if err != nil {
 			fmt.Println("Error:", err)
 			fmt.Println("Stderr:", stderr)
@@ -49,7 +50,7 @@ func installWordpress(w http.ResponseWriter, r *http.Request) {
 		}
 	
 		// 正常に終了した場合の処理
-		fmt.Println("Script executed successfully")
+		fmt.Println("create user's DB script executed successfully")
 		fmt.Println("Stdout:", stdout)
 	}
 
@@ -58,8 +59,8 @@ func installWordpress(w http.ResponseWriter, r *http.Request) {
 		scriptPath := "../../script/wordpress_setup.sh"
 	
 		// シェルスクリプトの実行
-		//  $0 <username> <domain> <db_name> <db_user> <db_password>"
-		stdout, stderr, err := runShellScript(scriptPath, username, os.Getenv("DOMAIN"), username, username, dbPassword)
+		//  $0 <username> <domain> <db_password> <admin_password> <admin_email>
+		stdout, stderr, err := runShellScript(scriptPath, username, os.Getenv("DOMAIN"), ubuntuPassword, ubuntuPassword, email)
 		if err != nil {
 			fmt.Println("Error:", err)
 			fmt.Println("Stderr:", stderr)
@@ -85,6 +86,7 @@ func getWordpressStatus(w http.ResponseWriter, r *http.Request) {
 
 	wordpressURL := fmt.Sprintf("https://crane74.com/%s/wordpress", username)
 	
+	fmt.Println(fmt.Sprintf("URL: %s status get", wordpressURL))
 	statusCode, status, err := checkWebsiteStatus(wordpressURL)
     message := "Website is " + status
 

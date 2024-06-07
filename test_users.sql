@@ -1,8 +1,8 @@
 INSERT INTO users 
-(name, password) VALUES
-('testuser1', 'password1'),
-('testuser2', 'password2'),
-('testuser3', 'password3');
+(id, name, password) VALUES
+('aaa', 'testuser1', 'password1'),
+('bbb', 'testuser2', 'password2'),
+('ccc', 'testuser3', 'password3');
 
 INSERT INTO mails
 (user_id, mail_localpart, mail_address) VALUES

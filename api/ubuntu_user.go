@@ -8,17 +8,22 @@ import (
 	"database/sql"
 )
 
-type UserRequest struct {
+type UserCreateRequest struct {
     UserId string `json:"user_id"`
     UserName string `json:"username"`
 	Password string `json:"password"`
+}
+
+type UserDeleteRequest struct {
+	UserId string `json:"user_id"`
+    UserName string `json:"username"`
 }
 
 func addUbuntuUser(w http.ResponseWriter, r *http.Request) {
 	db := Db()
 	defer db.Close()
 
-	var requestSchema UserRequest
+	var requestSchema UserCreateRequest
 	if err := json.NewDecoder(r.Body).Decode(&requestSchema); err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
         return
@@ -31,8 +36,8 @@ func addUbuntuUser(w http.ResponseWriter, r *http.Request) {
 	if exist,err := checkUserNameExist(db, username); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
-	} else if exist {
-		http.Error(w, "そのユーザは既に存在しています", http.StatusBadRequest)
+	} else if !exist {
+		http.Error(w, "そのユーザは登録されていません", http.StatusBadRequest)
 		return
 	}
 
@@ -51,7 +56,7 @@ func addUbuntuUser(w http.ResponseWriter, r *http.Request) {
 		scriptPath := "../../script/user_add.sh"
 	
 		// シェルスクリプトの実行
-		fmt.Println("User: %s add script run ...", username)
+		fmt.Println(fmt.Sprintf("User: %s add script run ...", username))
 		stdout, stderr, err := runShellScript(scriptPath, username, password)
 		if err != nil {
 			fmt.Println("Error:", err)
@@ -72,13 +77,13 @@ func deleteUbuntuUser(w http.ResponseWriter, r *http.Request) {
 	db := Db()
 	defer db.Close()
 
-	var requestSchema UserRequest
+	var requestSchema UserDeleteRequest
 	if err := json.NewDecoder(r.Body).Decode(&requestSchema); err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
 
-	// userId := requestSchema.UserId
+	userId := requestSchema.UserId
 	username := requestSchema.UserName
 
 	// TODO: 動作確認（APIを叩いて正常にシェルスクリプトが走るか）
@@ -100,6 +105,22 @@ func deleteUbuntuUser(w http.ResponseWriter, r *http.Request) {
 		// 正常に終了した場合の処理
 		fmt.Println("Script executed successfully")
 		fmt.Println("Stdout:", stdout)
+	}
+
+	// ユーザが作成したメールアドレスを全て削除
+	deleteUserAllMail(userId)
+
+	// ユーザのDB削除
+	query := "DROP DATABASE IF EXISTS ?"
+	stmt, err := db.Prepare(query)
+    if err != nil {
+        return
+    }
+    defer stmt.Close()
+    _, err = stmt.Exec(username)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)

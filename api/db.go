@@ -56,3 +56,18 @@ func databaseExists(db *sql.DB, dbName string) (bool, error) {
     }
     return true, nil
 }
+
+// ユーザIDからemail取得
+func getUserEmail(db *sql.DB, userId string) (string, error) {
+    var email string
+    query := "SELECT email FROM users WHERE id = ?"
+
+    err := db.QueryRow(query, userId).Scan(&email)
+    if err != nil {
+        if err == sql.ErrNoRows {
+            return "", fmt.Errorf("no user found with id %d")
+        }
+        return "", err
+    }
+    return email, nil
+}
